@@ -9,6 +9,7 @@ let lightbox = new SimpleLightbox('.gallery a');
 let searchQuery = "";
 let page = 1;
 const perPage = 40;
+let lastCard = "";
 
 const refs = {
     searchForm: document.querySelector("#search-form"),
@@ -44,11 +45,15 @@ function onSearch(event) {
             refs.loadMoreBtn.classList.remove("is-hidden")
         };
         lightbox.refresh();
-    })
+
+        if (lastCard) {
+        infiniteObserver.observe(lastCard);
+        };
+        })
         .catch (error => console.log (error.message));
 };
 
-function onLoadMore() {
+    function onLoadMore() {
     getImages(searchQuery, page, perPage).then(data => {
         incrementPage();
         if (page > (data.totalHits / perPage)) {
@@ -57,7 +62,10 @@ function onLoadMore() {
         };
         renderImagesList(data.hits);
         lightbox.refresh();
-    })
+        if (lastCard) {
+        infiniteObserver.observe(lastCard);
+        };
+        })
         .catch(error => console.log (error.message));
 };
 
@@ -92,8 +100,22 @@ function renderImagesList(images) {
 </div>`
     ).join("");
     refs.galleryContainer.insertAdjacentHTML("beforeend", markup);
+    lastCard = document.querySelector(".photo-card:last-child");
 };
 
 function clearGalleryContainer() {
     refs.galleryContainer.innerHTML = "";
 }
+
+const infiniteObserver = new IntersectionObserver(
+  ([entry], observer) => {
+    // проверяем что достигли последнего элемента
+    if (entry.isIntersecting) {
+      // перестаем его отслеживать
+      observer.unobserve(entry.target);
+      // и загружаем новую порцию контента
+      onLoadMore();
+    }
+  },
+  { threshold: 0.5 }
+);

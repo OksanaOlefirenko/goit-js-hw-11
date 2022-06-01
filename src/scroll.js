@@ -8,7 +8,6 @@ btnTop.addEventListener('click', onBtnTop);
 function onScroll() {
     const scrolled = window.pageYOffset;
     const coords = document.documentElement.clientHeight;
-    console.log(scrolled, coords);
 
   if (scrolled > coords) {
     btnTop.classList.add('button-top--visible')

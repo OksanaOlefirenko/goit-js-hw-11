@@ -14,4 +14,3 @@ export async function getImages(searchName, page, perPage) {
     const response = await axios.get(URL + `&q=${searchName}` + `&page=${page}` + `&per_page=${perPage}`);
     return response.data;
 };
-
