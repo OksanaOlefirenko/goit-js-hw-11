@@ -35,7 +35,8 @@ function onSearch(event) {
         incrementPage();
         clearGalleryContainer();
         
-        if (data.totalHits===0) {
+        if (data.totalHits === 0) {
+            refs.loadMoreBtn.classList.add("is-hidden");
             return Notiflix.Notify.failure ("Sorry, there are no images matching your search query. Please try again.")
         };
         Notiflix.Notify.success(`"Hooray! We found ${data.totalHits} images."`);
