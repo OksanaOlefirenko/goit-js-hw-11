@@ -32,7 +32,7 @@ function onSearch(event) {
     }
     resetPage();
     getImages(searchQuery, page, perPage).then(data => {
-        incrementPage();
+
         clearGalleryContainer();
         
         if (data.totalHits === 0) {
@@ -54,14 +54,16 @@ function onSearch(event) {
         .catch (error => console.log (error.message));
 };
 
-    function onLoadMore() {
-    getImages(searchQuery, page, perPage).then(data => {
+function onLoadMore() {
         incrementPage();
+        getImages(searchQuery, page, perPage).then(data => {
+        renderImagesList(data.hits);
+
         if (page > (data.totalHits / perPage)) {
             refs.loadMoreBtn.classList.add("is-hidden");
             return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         };
-        renderImagesList(data.hits);
+
         lightbox.refresh();
         if (lastCard) {
         infiniteObserver.observe(lastCard);
