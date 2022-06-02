@@ -58,13 +58,11 @@ function onLoadMore() {
         incrementPage();
         getImages(searchQuery, page, perPage).then(data => {
         renderImagesList(data.hits);
-
+        lightbox.refresh();
         if (page > (data.totalHits / perPage)) {
             refs.loadMoreBtn.classList.add("is-hidden");
             return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         };
-
-        lightbox.refresh();
         if (lastCard) {
         infiniteObserver.observe(lastCard);
         };
